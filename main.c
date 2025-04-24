@@ -29,13 +29,55 @@ void initializeSampleBooks() {
         {10, "Crime and Punishment\n", "Fyodor Dostoevsky\n", 0},
         {11, "The Odyssey\n", "Homer\n", 0},
         {12, "The Brothers Karamazov\n", "Fyodor Dostoevsky\n", 0},
-        {13, "Jane Eyre\n", "Charlotte Brontë\n", 0},
-        {14, "Wuthering Heights\n", "Emily Brontë\n", 0},
+        {13, "Jane Eyre\n", "Charlotte BrontÃ«\n", 0},
+        {14, "Wuthering Heights\n", "Emily BrontÃ«\n", 0},
         {15, "The Lord of the Rings\n", "J.R.R. Tolkien\n", 0},
         {16, "Animal Farm\n", "George Orwell\n", 0},
         {17, "Great Expectations\n", "Charles Dickens\n", 0},
         {18, "Lolita\n", "Vladimir Nabokov\n", 0},
         {19, "Ulysses\n", "James Joyce\n", 0},
         {20, "The Divine Comedy\n", "Dante Alighieri\n", 0},
-        {21, "Harry Potter and the Sorcerer’s Stone\n", "J.K. Rowling\n", 0},
+        {21, "Harry Potter and the Sorcererâ€™s Stone\n", "J.K. Rowling\n", 0},
         {22, "The Alchemist\n", "Paulo Coelho\n", 0},
+    }
+}
+
+void searchBook() {
+    char search[100];
+    printf("Enter book title to search: ");
+    getchar();
+    fgets(search, 100, stdin);
+    for (int i = 0; i < bookCount; i++) {
+        if (strstr(books[i].title, search)) {
+            printf("Found: ID %d | Title: %sAuthor: %s\n", books[i].id, books[i].title, books[i].author);
+        }
+    }
+}
+
+void deleteBook() {
+    int id;
+    printf("Enter book ID to delete: ");
+    scanf("%d", &id);
+    for (int i = 0; i < bookCount; i++) {
+        if (books[i].id == id) {
+            for (int j = i; j < bookCount - 1; j++) {
+                books[j] = books[j + 1];
+            }
+            bookCount--;
+            printf("Book deleted.\n");
+            return;
+        }
+    }
+    printf("Book not found.\n");
+}
+
+void issueBook() {
+    int id;
+    printf("Enter book ID to issue: ");
+    scanf("%d", &id);
+    for (int i = 0; i < bookCount; i++) {
+        if (books[i].id == id) {
+            if (books[i].isIssued) {
+                printf("Book already issued.\n");
+                return;
+            } else {
