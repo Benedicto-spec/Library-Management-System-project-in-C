@@ -39,48 +39,47 @@ void initializeSampleBooks() {
         {20, "The Divine Comedy\n", "Dante Alighieri\n", 0},
         {21, "Harry Potter and the Sorcerer’s Stone\n", "J.K. Rowling\n", 0},
         {22, "The Alchemist\n", "Paulo Coelho\n", 0},
+    };
+    int n = sizeof(samples) / sizeof(samples[0]);
+    for (int i = 0; i < n && bookCount < MAX_BOOKS; i++) {
+        books[bookCount++] = samples[i];
+    }
+}
+void addBook() {
+    if (bookCount >= MAX_BOOKS) {
+        printf("Library full!\n");
+        return;
+    }
+    printf("Enter book ID: ");
+    if (scanf("%d", &books[bookCount].id) != 1) {
+        printf("Invalid input. Please enter a number for the book ID.\n");
+        // Optionally, clear the input buffer:
+        while (getchar() != '\n');
+        return; // Don't proceed with adding the book
+    }
+    printf("Enter book title: ");
+    getchar(); // clear newline
+    fgets(books[bookCount].title, 100, stdin);
+    books[bookCount].title[strcspn(books[bookCount].title, "\n")] = '\0';
+    printf("Enter author name: ");
+    fgets(books[bookCount].author, 50, stdin);
+    books[bookCount].author[strcspn(books[bookCount].author, "\n")] = '\0';
+    books[bookCount].isIssued = 0;
+    bookCount++;
+    printf("Book added successfully!\n");
+}
+
+void displayBooks() {
+    printf("=== Book List ===\n");
+    for (int i = 0; i < bookCount; i++) {
+        printf("ID: %d | Title: %s | Author: %s | Status: %s\n",
+               books[i].id,
+               books[i].title,
+               books[i].author,
+               books[i].isIssued ? "Issued" : "Available");
     }
 }
 
-void searchBook() {
-    char search[100];
-    printf("Enter book title to search: ");
-    getchar();
-    fgets(search, 100, stdin);
-    for (int i = 0; i < bookCount; i++) {
-        if (strstr(books[i].title, search)) {
-            printf("Found: ID %d | Title: %sAuthor: %s\n", books[i].id, books[i].title, books[i].author);
-        }
-    }
-}
-
-void deleteBook() {
-    int id;
-    printf("Enter book ID to delete: ");
-    scanf("%d", &id);
-    for (int i = 0; i < bookCount; i++) {
-        if (books[i].id == id) {
-            for (int j = i; j < bookCount - 1; j++) {
-                books[j] = books[j + 1];
-            }
-            bookCount--;
-            printf("Book deleted.\n");
-            return;
-        }
-    }
-    printf("Book not found.\n");
-}
-
-void issueBook() {
-    int id;
-    printf("Enter book ID to issue: ");
-    scanf("%d", &id);
-    for (int i = 0; i < bookCount; i++) {
-        if (books[i].id == id) {
-            if (books[i].isIssued) {
-                printf("Book already issued.\n");
-                return;
-            } else {
 void searchBook() {
     char search[100];
     printf("Enter book title to search: ");
@@ -168,3 +167,25 @@ int main() {
         printf("3. Search Book\n");
         printf("4. Delete Book\n");
         printf("5. Issue Book\n");
+        printf("6. Return Book\n");
+        printf("7. Exit\n");
+        printf("Enter choice: ");
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input. Please enter a number from 1 to 7.\n");
+            while (getchar() != '\n'); // Clear the input buffer
+            continue; // Go back to the menu
+        }
+
+        switch (choice) {
+            case 1: addBook(); break;
+            case 2: displayBooks(); break;
+            case 3: searchBook(); break;
+            case 4: deleteBook(); break;
+            case 5: issueBook(); break;
+            case 6: returnBook(); break;
+            case 7: exit(0);
+            default: printf("Invalid choice.\n");
+        }
+    }
+    return 0;
+}
