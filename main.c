@@ -137,3 +137,34 @@ void issueBook() {
 
     printf("Book not found.\n");
 }
+void returnBook() {
+    int id;
+    printf("Enter book ID to return: ");
+    scanf("%d", &id);
+
+    for (int i = 0; i < bookCount; i++) {
+        if (books[i].id == id) {
+            if (!books[i].isIssued) {
+                printf("Book was not issued.\n");
+            } else {
+                books[i].isIssued = 0;
+                printf("Book returned.\n");
+            }
+            return;
+        }
+    }
+
+    printf("Book not found.\n");
+}
+
+int main() {
+    initializeSampleBooks();  // Pre-load sample books
+    int choice;
+
+    while (1) {
+        printf("\n=== Library Management System ===\n");
+        printf("1. Add Book\n");
+        printf("2. Display All Books\n");
+        printf("3. Search Book\n");
+        printf("4. Delete Book\n");
+        printf("5. Issue Book\n");
